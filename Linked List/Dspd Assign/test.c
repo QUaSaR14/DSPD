@@ -227,6 +227,60 @@ AddressNode* Read()
 	return finalHead1;
 }
 
+MatNode *Delete(MatNode *p){
+	MatNode *q ;
+	if(p!=NULL){
+		q = p->next;
+		p->next = q->next;
+		free(q);
+	}
+	return p;
+}
+
+void DeleteNode(AddressNode* mat, int row, int colmn){
+
+	AddressNode *head;
+	MatNode *curr, *prev=NULL;
+	int flag=0;
+	if(mat!=NULL) {
+		head = mat;
+		while(head!=NULL && flag==0){
+			if(head->address == row){
+				flag=1;
+				curr = head->rowList;
+			}
+			else{
+				head = head->nextAddress;
+			}
+		}
+		if(flag){
+			if(curr->col == colmn){
+				MatNode *nptr;
+				nptr = curr;
+				curr = curr->next;
+				free(nptr);
+				head->rowList = curr;
+			}
+			else {
+				while(curr!=NULL && flag==1){
+					if(curr->col == colmn){
+						flag=0;
+						curr = Delete(prev);
+					}
+					else {
+						prev = curr;
+						curr = curr->next;
+					}
+				}
+			}
+		}
+		else {
+			printf("Node Not Found !!");
+		}
+	}
+    return;
+}
+
 //=======================END OF SPARSE MATRIX=======================
 
 
@@ -256,6 +310,10 @@ int main() {
     //SEAT CHART
     AddressNode* mat1;
 	mat1=Read();
+
+	//DELETE NODE
+	DeleteNode(mat1, 1, 2);
+	TraverseMatrix(mat1);
 
 	//TICKET ID
 
